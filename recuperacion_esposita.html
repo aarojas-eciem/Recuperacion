@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Recuperación de mi Esposita 💚</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde: #3a7d44;
+    --verde-claro: #6db57a;
+    --verde-suave: #e8f5ea;
+    --verde-med: #c3e6c9;
+    --naranja: #e07b39;
+    --naranja-suave: #fdf0e8;
+    --azul: #3a6ea8;
+    --azul-suave: #e8f0fb;
+    --rojo-suave: #fdeaea;
+    --rojo: #c0392b;
+    --morado: #7b5ea7;
+    --morado-suave: #f2eefa;
+    --rosa: #b5477a;
+    --rosa-suave: #fdeef4;
+    --texto: #2c3e2d;
+    --gris: #7a8c7b;
+    --sombra: 0 4px 20px rgba(58,125,68,0.10);
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body {
+    font-family:'Nunito',sans-serif;
+    background:linear-gradient(160deg,#f0f9f1 0%,#fff8f0 50%,#f0f4f9 100%);
+    min-height:100vh; color:var(--texto); padding-bottom:40px;
+  }
+
+  /* HERO */
+  .hero {
+    background:linear-gradient(135deg,var(--verde) 0%,#5aab66 60%,var(--verde-claro) 100%);
+    color:white; text-align:center; padding:40px 20px 52px;
+    position:relative; overflow:hidden;
+  }
+  .hero::before { content:''; position:absolute; top:-40px; right:-40px; width:180px; height:180px; background:rgba(255,255,255,0.07); border-radius:50%; }
+  .hero::after  { content:''; position:absolute; bottom:-30px; left:-30px; width:120px; height:120px; background:rgba(255,255,255,0.07); border-radius:50%; }
+  .hero-heart { font-size:2.8rem; margin-bottom:8px; }
+  .hero h1 { font-family:'Playfair Display',serif; font-size:1.75rem; font-weight:700; line-height:1.2; margin-bottom:8px; }
+  .hero p  { font-size:0.88rem; opacity:0.85; font-weight:300; }
+
+  /* TABS */
+  .tabs {
+    display:flex; margin:0 12px; margin-top:-22px;
+    background:white; border-radius:18px;
+    box-shadow:var(--sombra); overflow:hidden; position:relative; z-index:10;
+  }
+  .tab-btn {
+    flex:1; padding:12px 4px; border:none; background:white;
+    font-family:'Nunito',sans-serif; font-size:0.68rem; font-weight:700;
+    color:var(--gris); cursor:pointer; transition:all 0.3s;
+    display:flex; flex-direction:column; align-items:center; gap:3px; line-height:1.2;
+  }
+  .tab-btn .tab-icon { font-size:1.2rem; }
+  .tab-btn.active { background:var(--verde); color:white; }
+  .tab-btn:first-child { border-radius:18px 0 0 18px; }
+  .tab-btn:last-child  { border-radius:0 18px 18px 0; }
+
+  .content { padding:18px 14px 0; display:none; }
+  .content.active { display:block; }
+
+  /* CARDS */
+  .card { background:white; border-radius:20px; padding:18px; margin-bottom:14px; box-shadow:var(--sombra); }
+  .card-title { font-family:'Playfair Display',serif; font-size:1.05rem; color:var(--verde); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+  .card-title.azul   { color:var(--azul); }
+  .card-title.morado { color:var(--morado); }
+  .card-title.rosa   { color:var(--rosa); }
+
+  .badge { display:inline-flex; align-items:center; padding:4px 10px; border-radius:20px; font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+  .badge-verde   { background:var(--verde-suave);  color:var(--verde); }
+  .badge-naranja { background:var(--naranja-suave); color:var(--naranja); }
+  .badge-azul    { background:var(--azul-suave);   color:var(--azul); }
+
+  .aviso { border-left:4px solid var(--verde); border-radius:14px; padding:13px 15px; margin-bottom:14px; font-size:0.86rem; color:var(--texto); line-height:1.5; }
+  .aviso.verde  { background:linear-gradient(135deg,var(--verde-suave),#d4edda); border-left-color:var(--verde); }
+  .aviso.azul   { background:var(--azul-suave);   border-left-color:var(--azul); }
+  .aviso.morado { background:var(--morado-suave); border-left-color:var(--morado); }
+  .aviso.rosa   { background:var(--rosa-suave);   border-left-color:var(--rosa); }
+
+  /* ALIMENTACIÓN */
+  .minuta-grid { display:flex; flex-direction:column; gap:9px; }
+  .minuta-item { display:flex; align-items:flex-start; gap:11px; background:var(--verde-suave); border-radius:13px; padding:11px 13px; }
+  .minuta-hora { min-width:70px; font-size:0.73rem; font-weight:800; color:var(--verde); text-transform:uppercase; letter-spacing:0.5px; padding-top:2px; }
+  .minuta-desc { font-size:0.84rem; line-height:1.5; color:var(--texto); }
+  .minuta-or   { font-size:0.73rem; color:var(--gris); font-style:italic; margin:2px 0; }
+
+  .grupo-accordion { border:1.5px solid var(--verde-med); border-radius:13px; margin-bottom:9px; overflow:hidden; }
+  .grupo-header { display:flex; align-items:center; justify-content:space-between; padding:12px 15px; background:var(--verde-suave); cursor:pointer; user-select:none; }
+  .grupo-header-left { display:flex; align-items:center; gap:9px; font-weight:700; font-size:0.9rem; color:var(--verde); }
+  .grupo-icon  { font-size:1.15rem; }
+  .grupo-arrow { font-size:0.78rem; color:var(--gris); transition:transform 0.3s; }
+  .grupo-accordion.open .grupo-arrow { transform:rotate(180deg); }
+  .grupo-body  { display:none; padding:11px 15px; background:white; }
+  .grupo-accordion.open .grupo-body { display:block; }
+  .alimento-row { display:flex; justify-content:space-between; align-items:flex-start; padding:6px 0; border-bottom:1px solid var(--verde-suave); font-size:0.83rem; gap:8px; }
+  .alimento-row:last-child { border-bottom:none; }
+  .alimento-nombre  { color:var(--texto); flex:1; }
+  .alimento-porcion { color:var(--verde); font-weight:700; font-size:0.78rem; text-align:right; min-width:105px; }
+
+  .rec-list { list-style:none; }
+  .rec-list li { display:flex; align-items:flex-start; gap:9px; padding:8px 0; border-bottom:1px solid #f0f0f0; font-size:0.85rem; line-height:1.4; }
+  .rec-list li:last-child { border-bottom:none; }
+  .rec-icon { font-size:1.05rem; margin-top:1px; min-width:21px; }
+
+  /* REMEDIOS */
+  .horario-list { display:flex; flex-direction:column; gap:11px; }
+  .hora-bloque  { border-radius:17px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.07); }
+  .hora-header  { display:flex; align-items:center; gap:11px; padding:12px 15px; font-weight:800; color:white; }
+  .hora-icon { font-size:1.25rem; }
+  .hora-time { font-family:'Playfair Display',serif; font-size:1.1rem; }
+  .hora-label{ font-size:0.73rem; font-weight:400; opacity:0.85; }
+  .h-verde   .hora-header { background:linear-gradient(90deg,#2d7a3a,#5aab66); }
+  .h-azul    .hora-header { background:linear-gradient(90deg,#2558a0,#4a7ec5); }
+  .h-naranja .hora-header { background:linear-gradient(90deg,#c0622a,#e07b39); }
+  .h-oscuro  .hora-header { background:linear-gradient(90deg,#2c3e50,#4a6070); }
+  .hora-medicamentos { background:white; padding:9px 13px; }
+  .med-row { display:flex; align-items:flex-start; gap:9px; padding:7px 0; border-bottom:1px solid #f5f5f5; }
+  .med-row:last-child { border-bottom:none; }
+  .med-nombre { font-weight:700; font-size:0.86rem; color:var(--texto); flex:1; }
+  .med-dosis  { font-size:0.78rem; color:var(--gris); margin-top:2px; }
+  .med-tipo   { margin-top:3px; }
+
+  .sos-card { background:linear-gradient(135deg,#fff3e8,#ffeedd); border:2px solid var(--naranja); border-radius:17px; padding:16px; margin-bottom:14px; }
+  .sos-title { font-weight:800; color:var(--naranja); font-size:0.97rem; margin-bottom:11px; display:flex; align-items:center; gap:8px; }
+  .sos-item  { background:white; border-radius:12px; padding:11px 13px; margin-bottom:8px; }
+  .sos-item:last-child { margin-bottom:0; }
+  .sos-condicion { font-size:0.8rem; color:var(--naranja); font-weight:700; text-transform:uppercase; letter-spacing:0.4px; margin-bottom:4px; }
+  .sos-med   { font-size:0.86rem; color:var(--texto); font-weight:600; }
+  .sos-dosis { font-size:0.78rem; color:var(--gris); margin-top:2px; }
+
+  .alerta-contacto { background:linear-gradient(135deg,#fdeaea,#fff0f0); border:2px solid var(--rojo); border-radius:17px; padding:15px; margin-bottom:14px; }
+  .alerta-title { font-weight:800; color:var(--rojo); margin-bottom:9px; display:flex; align-items:center; gap:6px; font-size:0.92rem; }
+  .alerta-list { list-style:none; }
+  .alerta-list li { font-size:0.83rem; padding:5px 0; border-bottom:1px solid rgba(192,57,43,0.1); display:flex; align-items:flex-start; gap:8px; }
+  .alerta-list li:last-child { border-bottom:none; }
+
+  /* DESCANSO */
+  .cuidado-bloque { border-radius:15px; overflow:hidden; margin-bottom:11px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+  .cuidado-header { display:flex; align-items:center; gap:9px; padding:12px 15px; color:white; font-weight:800; font-size:0.9rem; cursor:pointer; user-select:none; }
+  .cuidado-header.morado-bg  { background:linear-gradient(90deg,#5e3a8c,#8c5ec0); }
+  .cuidado-header.azul-bg    { background:linear-gradient(90deg,#2558a0,#4a7ec5); }
+  .cuidado-header.verde-bg   { background:linear-gradient(90deg,#2d7a3a,#5aab66); }
+  .cuidado-header.naranja-bg { background:linear-gradient(90deg,#c0622a,#e07b39); }
+  .cuidado-header.oscuro-bg  { background:linear-gradient(90deg,#2c3e50,#4a6070); }
+  .cuidado-header-icon { font-size:1.15rem; }
+  .cuidado-arrow { margin-left:auto; font-size:0.78rem; opacity:0.8; transition:transform 0.3s; }
+  .cuidado-bloque.open .cuidado-arrow { transform:rotate(180deg); }
+  .cuidado-body  { display:none; background:white; padding:13px 15px; }
+  .cuidado-bloque.open .cuidado-body { display:block; }
+  .cuidado-item  { display:flex; align-items:flex-start; gap:9px; padding:7px 0; border-bottom:1px solid #f0f0f0; font-size:0.84rem; line-height:1.5; color:var(--texto); }
+  .cuidado-item:last-child { border-bottom:none; }
+  .cuidado-item-icon { font-size:1.05rem; min-width:21px; }
+
+  /* ========================= */
+  /* MASAJES — CALENDARIO      */
+  /* ========================= */
+
+  /* Indicaciones */
+  .indicacion-chips { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+  .chip {
+    display:flex; align-items:center; gap:6px;
+    background:white; border:2px solid var(--rosa-suave);
+    border-radius:50px; padding:8px 14px;
+    font-size:0.83rem; font-weight:700; color:var(--rosa);
+    box-shadow:0 2px 8px rgba(181,71,122,0.08);
+  }
+  .chip-icon { font-size:1rem; }
+
+  /* Primera semana ejemplo */
+  .semana-grid {
+    display:grid; grid-template-columns:repeat(7,1fr);
+    gap:4px; margin-bottom:6px;
+  }
+  .semana-dia-header {
+    text-align:center; font-size:0.62rem; font-weight:800;
+    text-transform:uppercase; color:var(--gris); padding:4px 2px;
+  }
+  .semana-dia {
+    background:var(--verde-suave); border-radius:10px;
+    padding:8px 4px; text-align:center; font-size:0.7rem;
+    min-height:58px; display:flex; flex-direction:column;
+    align-items:center; justify-content:flex-start; gap:3px;
+  }
+  .semana-dia.cirugia   { background:#fdeef4; border:2px solid var(--rosa); }
+  .semana-dia.alta-dia  { background:#e8f0fb; border:2px solid var(--azul); }
+  .semana-dia.masaje    { background:linear-gradient(135deg,#fde8f4,#f9d0e8); border:2px solid var(--rosa); }
+  .semana-dia.reposo    { background:#f5f5f5; }
+  .semana-dia-num  { font-weight:800; font-size:0.78rem; color:var(--texto); }
+  .semana-dia-label{ font-size:0.6rem; font-weight:700; line-height:1.2; text-align:center; }
+  .semana-dia.cirugia .semana-dia-label   { color:var(--rosa); }
+  .semana-dia.alta-dia .semana-dia-label  { color:var(--azul); }
+  .semana-dia.masaje .semana-dia-label    { color:var(--rosa); }
+  .semana-dia.reposo .semana-dia-label    { color:var(--gris); }
+  .semana-emoji { font-size:1rem; }
+  .semana-leyenda { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+  .leyenda-item { display:flex; align-items:center; gap:5px; font-size:0.72rem; color:var(--gris); }
+  .leyenda-dot  { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+
+  /* CONFIGURADOR */
+  .config-card {
+    background:linear-gradient(135deg,#fdeef4,#fce4ec);
+    border:2px solid var(--rosa); border-radius:20px;
+    padding:18px; margin-bottom:14px;
+  }
+  .config-title { font-family:'Playfair Display',serif; font-size:1.05rem; color:var(--rosa); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+
+  .config-row { margin-bottom:14px; }
+  .config-label { font-size:0.8rem; font-weight:800; color:var(--rosa); text-transform:uppercase; letter-spacing:0.4px; margin-bottom:6px; }
+  .config-sublabel { font-size:0.75rem; color:var(--gris); margin-bottom:8px; font-weight:400; }
+
+  /* selector opciones */
+  .opciones-grid { display:flex; gap:6px; flex-wrap:wrap; }
+  .opcion-btn {
+    flex:1; min-width:60px; padding:9px 6px; border:2px solid #e0c0d0;
+    border-radius:12px; background:white; font-family:'Nunito',sans-serif;
+    font-size:0.82rem; font-weight:700; color:var(--gris);
+    cursor:pointer; transition:all 0.2s; text-align:center;
+  }
+  .opcion-btn.sel { background:var(--rosa); border-color:var(--rosa); color:white; }
+
+  .config-input {
+    width:100%; padding:10px 14px; border:2px solid #e0c0d0;
+    border-radius:12px; font-family:'Nunito',sans-serif;
+    font-size:0.88rem; color:var(--texto); background:white;
+    outline:none; transition:border 0.2s;
+  }
+  .config-input:focus { border-color:var(--rosa); }
+
+  .generar-btn {
+    width:100%; padding:13px; background:linear-gradient(135deg,var(--rosa),#d4638d);
+    color:white; border:none; border-radius:14px;
+    font-family:'Nunito',sans-serif; font-size:0.95rem; font-weight:800;
+    cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;
+    box-shadow:0 4px 16px rgba(181,71,122,0.3); transition:opacity 0.2s;
+  }
+  .generar-btn:hover { opacity:0.92; }
+
+  /* CALENDARIO GENERADO */
+  #calendario-resultado { display:none; margin-top:14px; }
+
+  .cal-header {
+    background:linear-gradient(135deg,var(--rosa),#d4638d);
+    color:white; border-radius:16px 16px 0 0;
+    padding:14px 16px; text-align:center;
+  }
+  .cal-header-title { font-family:'Playfair Display',serif; font-size:1.1rem; margin-bottom:2px; }
+  .cal-header-sub   { font-size:0.78rem; opacity:0.88; }
+
+  .cal-body { background:white; border-radius:0 0 16px 16px; padding:12px; box-shadow:0 4px 20px rgba(181,71,122,0.12); }
+
+  .cal-mes { margin-bottom:14px; }
+  .cal-mes-nombre {
+    font-weight:800; font-size:0.8rem; text-transform:uppercase;
+    letter-spacing:0.6px; color:var(--rosa);
+    padding:6px 10px; background:var(--rosa-suave);
+    border-radius:8px; margin-bottom:8px; display:inline-block;
+  }
+  .cal-mes-grid {
+    display:grid; grid-template-columns:repeat(7,1fr); gap:3px;
+  }
+  .cal-dia-head {
+    text-align:center; font-size:0.6rem; font-weight:800;
+    text-transform:uppercase; color:var(--gris); padding:3px 0;
+  }
+  .cal-dia {
+    aspect-ratio:1; border-radius:8px; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; font-size:0.75rem; font-weight:600;
+    color:#ccc; gap:1px;
+  }
+  .cal-dia.tiene-dia { color:var(--texto); }
+  .cal-dia.es-cirugia   { background:#fdeef4; color:var(--rosa); font-weight:800; border:2px solid var(--rosa); }
+  .cal-dia.es-alta      { background:var(--azul-suave); color:var(--azul); font-weight:800; border:2px solid var(--azul); }
+  .cal-dia.es-masaje    { background:linear-gradient(135deg,#fde8f4,#f5c6e0); color:var(--rosa); font-weight:800; border:2px solid var(--rosa); }
+  .cal-dia.es-hoy       { box-shadow:0 0 0 2px var(--verde); }
+  .cal-dia-emoji        { font-size:0.7rem; line-height:1; }
+
+  .cal-lista { margin-top:12px; }
+  .cal-lista-title { font-size:0.8rem; font-weight:800; color:var(--rosa); text-transform:uppercase; letter-spacing:0.4px; margin-bottom:8px; }
+  .cal-sesion-row {
+    display:flex; align-items:center; gap:10px;
+    padding:9px 12px; border-radius:12px;
+    background:linear-gradient(135deg,#fdeef4,#fce4ec);
+    margin-bottom:6px; font-size:0.84rem;
+  }
+  .cal-sesion-num {
+    background:var(--rosa); color:white;
+    width:24px; height:24px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.72rem; font-weight:800; flex-shrink:0;
+  }
+  .cal-sesion-fecha { font-weight:700; color:var(--texto); flex:1; }
+  .cal-sesion-dia   { font-size:0.75rem; color:var(--gris); }
+
+  .cal-resumen {
+    background:var(--verde-suave); border-radius:12px;
+    padding:12px 14px; margin-top:10px;
+    font-size:0.83rem; color:var(--texto); line-height:1.6;
+  }
+  .cal-resumen strong { color:var(--verde); }
+
+  /* FOOTER */
+  .amor-footer { text-align:center; padding:22px 20px 8px; color:var(--gris); font-size:0.86rem; line-height:1.7; }
+  .amor-footer .corazon { font-size:1.8rem; display:block; margin-bottom:6px; }
+  .amor-footer strong { color:var(--verde); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-heart">💚</div>
+  <h1>Recuperación de<br>mi Esposita ❤️</h1>
+  <p>Todo lo que necesitas saber para recuperarte bien</p>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('alimentacion')" id="tab-ali"><span class="tab-icon">🥗</span>Alimentación</button>
+  <button class="tab-btn" onclick="showTab('remedios')"    id="tab-rem"><span class="tab-icon">💊</span>Remedios</button>
+  <button class="tab-btn" onclick="showTab('descanso')"    id="tab-des"><span class="tab-icon">🛌</span>Descanso</button>
+  <button class="tab-btn" onclick="showTab('masajes')"     id="tab-mas"><span class="tab-icon">🤲</span>Masajes</button>
+</div>
+
+<!-- ======================== -->
+<!-- ALIMENTACIÓN             -->
+<!-- ======================== -->
+<div class="content active" id="alimentacion">
+  <div class="aviso verde">💡 <strong>Régimen Común:</strong> Se mantiene al alta hasta tener la cita nutricional y recibir una pauta personalizada.</div>
+
+  <div class="card">
+    <div class="card-title">🕐 Ejemplo de Minuta Diaria</div>
+    <div class="minuta-grid">
+      <div class="minuta-item">
+        <div class="minuta-hora">☀️ Desayuno</div>
+        <div class="minuta-desc">1 té con 2 rebanadas de pan de molde con quesillo y palta<div class="minuta-or">— o bien —</div>1 yogurt descremado con 4 cucharadas de avena con 1 fruta</div>
+      </div>
+      <div class="minuta-item">
+        <div class="minuta-hora">🍎 Colación AM</div>
+        <div class="minuta-desc">1 yogurt descremado o 1 fruta</div>
+      </div>
+      <div class="minuta-item">
+        <div class="minuta-hora">🍽️ Almuerzo</div>
+        <div class="minuta-desc">¾ taza de arroz con pollo y ensaladas</div>
+      </div>
+      <div class="minuta-item">
+        <div class="minuta-hora">🍌 Colación PM</div>
+        <div class="minuta-desc">1 yogurt o 1 fruta o 15 maní sin sal</div>
+      </div>
+      <div class="minuta-item">
+        <div class="minuta-hora">🌙 Once / Cena</div>
+        <div class="minuta-desc">1 taza de té con 2 rebanadas de pan de molde con jamón de pavo<div class="minuta-or">— o bien —</div>Ensaladas con ½ tarro de atún al agua</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">✅ Alimentos Permitidos</div>
+    <div class="grupo-accordion open">
+      <div class="grupo-header" onclick="toggleGrupo(this)"><div class="grupo-header-left"><span class="grupo-icon">🥛</span> Lácteos</div><span class="grupo-arrow">▼</span></div>
+      <div class="grupo-body">
+        <div class="alimento-row"><span class="alimento-nombre">Leche semi o descremada</span><span class="alimento-porcion">200 ml</span></div>
+        <div class="alimento-row"><span class="alimento-nombre">Yogurt descremado</span><span class="alimento-porcion">1 unidad 125 grs</span></div>
+        <div class="alimento-row"><span class="alimento-nombre">Ricota</span><span class="alimento-porcion">1 cucharada sopera</span></div>
+        <div class="alimento-row"><span class="alimento-nombre">Quesillo</span><span class="alimento-porcion">1 rodela 3 cm</span></div>
+        <div class="alimento-row"><span class="alimento-nombre">Leche cultivada</span><span class="alimento-porcion">200 ml</span></div>
+      </div>
+    </div>
+    <div class="grupo-accordion">
+      <div class="grupo-header" onclick="toggleGrupo(this)"><div class="grupo-header-left"><span class="grupo-icon">🥤</span> Jugos, Agua y Caldos</div><span class="grupo-arrow">▼</span></div>
+      <div class="grupo-body">
+        <div class="alimento-row"><span class="alimento-nombre">Zumo de fruta, jugos líquidos, jugos de fruta</span><span class="alimento-porcion">200 ml</span></div>
+        <div class="alimento-row"><span class="alimento-nombre">Agua mineral sin gas, agua de sabores</span><span class="alimento-porcion">200 ml</span></div>
+        <div class="alimento-row"><span class="alimento-nombre">Té y agua de hierbas tibias</span><span class="alimento-porcion">200 ml</span></div>
+        <div class="alimento-row"><span class="alimento-nombre">Caldos de verduras o carne — solo el líquido</span><span class="alimento-porcion">1 taza 200 ml</span></div>
+      </div>
+    </div>
+    <div class="grupo-accordion">
+      <div class="grupo-header" onclick="toggleGrupo(this)"><div class="grupo-header-left"><span class="grupo-icon">🥦</span> Frutas y Verduras</div><span class="grupo-arrow">▼</span></div>
+      <div class="grupo-body">
+        <div class="alimento-row"><span class="alimento-nombre">Verduras crudas y cocidas</span><span class="alimento-porcion">1 taza (200 grs)</span></div>
+        <div class="alimento-row"><span class="alimento-nombre">Frutas crudas o cocidas</span><span class="alimento-porcion">1 taza (200 grs)</span></div>
+      </div>
+    </div>
+    <div class="grupo-accordion">
+      <div class="grupo-header" onclick="toggleGrupo(this)"><div class="grupo-header-left"><span class="grupo-icon">🍞</span> Pan y Cereales</div><span class="grupo-arrow">▼</span></div>
+      <div class="grupo-body">
+        <div class="alimento-row"><span class="alimento-nombre">Pan molde blanco o integral</span><span class="alimento-porcion">2 rebanadas</span></div>
+        <div class="alimento-row"><span class="alimento-nombre">Marraqueta</span><span class="alimento-porcion">½ unidad</span></div>
+        <div class="alimento-row"><span class="alimento-nombre">Pan pita</span><span class="alimento-porcion">1 unidad</span></div>
+        <div class="alimento-row"><span class="alimento-nombre">Arroz, fideos, mote</span><span class="alimento-porcion">¾ taza</span></div>
+        <div class="alimento-row"><span class="alimento-nombre">Papa</span><span class="alimento-porcion">1 unidad</span></div>
+        <div class="alimento-row"><span class="alimento-nombre">Avena</span><span class="alimento-porcion">4 cucharadas</span></div>
+        <div class="alimento-row"><span class="alimento-nombre">Galletas soda o salvado</span><span class="alimento-porcion">6 unidades</span></div>
+      </div>
+    </div>
+    <div class="grupo-accordion">
+      <div class="grupo-header" onclick="toggleGrupo(this)"><div class="grupo-header-left"><span class="grupo-icon">🍗</span> Proteínas y Legumbres</div><span class="grupo-arrow">▼</span></div>
+      <div class="grupo-body">
+        <div class="alimento-row"><span class="alimento-nombre">Carnes rojas: posta rosada o negra, asiento, lomo liso, filete</span><span class="alimento-porcion">1 trozo (palma de la mano)</span></div>
+        <div class="alimento-row"><span class="alimento-nombre">Carnes blancas: pollo, pavo, pescado</span><span class="alimento-porcion">1 trozo (palma de la mano)</span></div>
+        <div class="alimento-row"><span class="alimento-nombre">Huevo cocido</span><span class="alimento-porcion">1 unidad</span></div>
+        <div class="alimento-row"><span class="alimento-nombre">Claras</span><span class="alimento-porcion">3 claras</span></div>
+        <div class="alimento-row"><span class="alimento-nombre">Garbanzos, porotos o lentejas</span><span class="alimento-porcion">¾ taza cocido</span></div>
+      </div>
+    </div>
+    <div class="grupo-accordion">
+      <div class="grupo-header" onclick="toggleGrupo(this)"><div class="grupo-header-left"><span class="grupo-icon">🥑</span> Grasas Buenas y Postres</div><span class="grupo-arrow">▼</span></div>
+      <div class="grupo-body">
+        <div class="alimento-row"><span class="alimento-nombre">Aceite de oliva</span><span class="alimento-porcion">4 cucharadas</span></div>
+        <div class="alimento-row"><span class="alimento-nombre">Palta</span><span class="alimento-porcion">½ palta</span></div>
+        <div class="alimento-row"><span class="alimento-nombre">Aceitunas</span><span class="alimento-porcion">10–11 unidades</span></div>
+        <div class="alimento-row"><span class="alimento-nombre">Nueces</span><span class="alimento-porcion">5 unidades</span></div>
+        <div class="alimento-row"><span class="alimento-nombre">Almendras</span><span class="alimento-porcion">10 unidades</span></div>
+        <div class="alimento-row"><span class="alimento-nombre">Maní sin sal</span><span class="alimento-porcion">15 unidades</span></div>
+        <div class="alimento-row"><span class="alimento-nombre">Sémola, avena o flan</span><span class="alimento-porcion">150–200 grs</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📌 Recomendaciones</div>
+    <ul class="rec-list">
+      <li><span class="rec-icon">💧</span> Consumir al menos <strong>2 litros de agua al día</strong></li>
+      <li><span class="rec-icon">♨️</span> Comer todo <strong>cocido, a la plancha o al horno</strong> — nada frito</li>
+      <li><span class="rec-icon">🍽️</span> Comer <strong>3 comidas principales y 2 colaciones</strong></li>
+      <li><span class="rec-icon">🙂</span> Comer según <strong>tolerancia</strong></li>
+      <li><span class="rec-icon">🚫</span> <strong>No consumir líquido junto con las comidas</strong></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======================== -->
+<!-- REMEDIOS                 -->
+<!-- ======================== -->
+<div class="content" id="remedios">
+  <div class="aviso azul">💊 Los medicamentos del horario se toman <strong>siempre</strong>. Los SOS solo <strong>cuando sea necesario</strong> según la situación indicada.</div>
+
+  <div class="card">
+    <div class="card-title azul">⏰ Horario Fijo de Medicamentos</div>
+    <div class="horario-list">
+      <div class="hora-bloque h-verde">
+        <div class="hora-header"><span class="hora-icon">🌅</span><div><div class="hora-time">7:00 AM</div><div class="hora-label">Mañana</div></div></div>
+        <div class="hora-medicamentos">
+          <div class="med-row"><div><div class="med-nombre">Paracetamol 1 gramo</div><div class="med-tipo"><span class="badge badge-verde">Analgésico</span></div></div></div>
+          <div class="med-row"><div><div class="med-nombre">Rivaxobaran 10 mg</div><div class="med-tipo"><span class="badge badge-azul">Anticoagulante</span></div></div></div>
+        </div>
+      </div>
+      <div class="hora-bloque h-azul">
+        <div class="hora-header"><span class="hora-icon">☀️</span><div><div class="hora-time">11:00 AM</div><div class="hora-label">Media mañana</div></div></div>
+        <div class="hora-medicamentos">
+          <div class="med-row"><div><div class="med-nombre">Naproxeno 550 mg</div><div class="med-tipo"><span class="badge badge-naranja">Antiinflamatorio</span></div></div></div>
+          <div class="med-row"><div><div class="med-nombre">Levofloxacino 500 mg</div><div class="med-tipo"><span class="badge badge-azul">Antibiótico</span></div></div></div>
+        </div>
+      </div>
+      <div class="hora-bloque h-naranja">
+        <div class="hora-header"><span class="hora-icon">🌤️</span><div><div class="hora-time">15:00</div><div class="hora-label">Tarde</div></div></div>
+        <div class="hora-medicamentos">
+          <div class="med-row"><div><div class="med-nombre">Paracetamol 1 gramo</div><div class="med-tipo"><span class="badge badge-verde">Analgésico</span></div></div></div>
+          <div class="med-row"><div><div class="med-nombre">Metamizol 300 mg</div><div class="med-tipo"><span class="badge badge-verde">Analgésico</span></div></div></div>
+        </div>
+      </div>
+      <div class="hora-bloque h-oscuro">
+        <div class="hora-header"><span class="hora-icon">🌙</span><div><div class="hora-time">23:00</div><div class="hora-label">Noche</div></div></div>
+        <div class="hora-medicamentos">
+          <div class="med-row"><div><div class="med-nombre">Paracetamol 1 gramo</div><div class="med-tipo"><span class="badge badge-verde">Analgésico</span></div></div></div>
+          <div class="med-row"><div><div class="med-nombre">Naproxeno 550 mg</div><div class="med-dosis">Solo si el Paracetamol no es suficiente</div><div class="med-tipo"><span class="badge badge-naranja">Antiinflamatorio</span></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sos-card">
+    <div class="sos-title">⚡ Medicamentos SOS — Solo en caso de dolor fuerte</div>
+    <div class="sos-item">
+      <div class="sos-condicion">🕖 A las 19:00 — en caso de dolor fuerte</div>
+      <div class="sos-med">Tramadol 50 mg</div>
+      <div class="sos-dosis">SOS — solo si es necesario</div>
+    </div>
+    <div class="sos-item">
+      <div class="sos-condicion">🌙 A las 3:00 AM — en caso de dolor fuerte</div>
+      <div class="sos-med">Tramadol 50 mg</div>
+      <div class="sos-dosis">SOS — solo si es necesario</div>
+    </div>
+    <div class="sos-item">
+      <div class="sos-condicion">🤢 Náuseas o vómitos</div>
+      <div class="sos-med">Domperidona 10 mg</div>
+      <div class="sos-dosis">u Ondansetron 4 u 8 mg — cada 8 hrs</div>
+    </div>
+    <div class="sos-item">
+      <div class="sos-condicion">🔥 Acidez o ardor — boca del estómago</div>
+      <div class="sos-med">Esomeprazol 40 mg</div>
+      <div class="sos-dosis">1 vez al día</div>
+    </div>
+    <div class="sos-item">
+      <div class="sos-condicion">🩸 En caso necesario — anemia</div>
+      <div class="sos-med">Globifer Forte — 1 comprimido</div>
+      <div class="sos-dosis">o Ferroprotina Ferrimanitol Ovoalbúmina — 1 sobre</div>
+    </div>
+  </div>
+
+  <div class="alerta-contacto">
+    <div class="alerta-title">🚨 Contactar al médico si aparece:</div>
+    <ul class="alerta-list">
+      <li><span>🌡️</span> Fiebre</li>
+      <li><span>🩸</span> Sangrado</li>
+      <li><span>💧</span> Supuración de una herida</li>
+      <li><span>😣</span> No logra controlar el dolor</li>
+      <li><span>🦵</span> Inflamación de las piernas</li>
+      <li><span>😮‍💨</span> Dificultad para respirar</li>
+      <li><span>😵</span> Desmayos recurrentes</li>
+      <li><span>⚠️</span> Caídas</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======================== -->
+<!-- DESCANSO                 -->
+<!-- ======================== -->
+<div class="content" id="descanso">
+  <div class="aviso morado">🛌 Seguir estas indicaciones es clave para una buena recuperación. <strong>La recuperación también depende del auto-cuidado.</strong></div>
+
+  <div class="cuidado-bloque open">
+    <div class="cuidado-header morado-bg" onclick="toggleCuidado(this)"><span class="cuidado-header-icon">🛏️</span>Posición en la cama<span class="cuidado-arrow">▼</span></div>
+    <div class="cuidado-body">
+      <div class="cuidado-item"><span class="cuidado-item-icon">⬆️</span> Dormir con el <strong>cabecero levantado</strong></div>
+      <div class="cuidado-item"><span class="cuidado-item-icon">✅</span> Dormir <strong>boca arriba</strong></div>
+      <div class="cuidado-item"><span class="cuidado-item-icon">🚫</span> <strong>No dormir boca abajo</strong> por 1 mes</div>
+    </div>
+  </div>
+
+  <div class="cuidado-bloque open">
+    <div class="cuidado-header azul-bg" onclick="toggleCuidado(this)"><span class="cuidado-header-icon">🚶</span>Reposo y movimiento<span class="cuidado-arrow">▼</span></div>
+    <div class="cuidado-body">
+      <div class="cuidado-item"><span class="cuidado-item-icon">📅</span> Los primeros <strong>2 días</strong>: mayor reposo en cama, levantarse al menos <strong>5 a 7 veces al día</strong></div>
+      <div class="cuidado-item"><span class="cuidado-item-icon">⏱️</span> Cada vez que se levante: <strong>caminar 5 a 7 minutos</strong></div>
+      <div class="cuidado-item"><span class="cuidado-item-icon">🔄</span> En algunas cirugías se recomienda caminar un poco <strong>inclinada el primer mes</strong></div>
+      <div class="cuidado-item"><span class="cuidado-item-icon">❤️</span> El movimiento evita <strong>trombosis</strong> y favorece la cicatrización — debe ser <strong>lento y suave</strong></div>
+      <div class="cuidado-item"><span class="cuidado-item-icon">📈</span> Reiniciar toda actividad de forma <strong>progresiva y sin apuros</strong></div>
+      <div class="cuidado-item"><span class="cuidado-item-icon">⚠️</span> Puede sufrir <strong>lipotimias o pequeños desmayos</strong> si exige demasiado al organismo</div>
+      <div class="cuidado-item"><span class="cuidado-item-icon">🚫</span> <strong>Evitar fuerza, ejercicios o movimientos bruscos</strong> hasta que el médico lo indique</div>
+    </div>
+  </div>
+
+  <div class="cuidado-bloque open">
+    <div class="cuidado-header verde-bg" onclick="toggleCuidado(this)"><span class="cuidado-header-icon">🩱</span>Faja y medias antiembólicas<span class="cuidado-arrow">▼</span></div>
+    <div class="cuidado-body">
+      <div class="cuidado-item"><span class="cuidado-item-icon">✅</span> Usar la faja de forma <strong>continua o el máximo de tiempo posible</strong> (1 a 3 meses)</div>
+      <div class="cuidado-item"><span class="cuidado-item-icon">⚠️</span> La faja <strong>NO debe estrangular los tejidos</strong> — riesgo de necrosis por exceso de presión</div>
+      <div class="cuidado-item"><span class="cuidado-item-icon">🧦</span> Las <strong>pantys antiembólicas</strong> se usan por <strong>1 mes</strong></div>
+    </div>
+  </div>
+
+  <div class="cuidado-bloque">
+    <div class="cuidado-header naranja-bg" onclick="toggleCuidado(this)"><span class="cuidado-header-icon">🩹</span>Cuidado de heridas y baño<span class="cuidado-arrow">▼</span></div>
+    <div class="cuidado-body">
+      <div class="cuidado-item"><span class="cuidado-item-icon">💧</span> <strong>No mojar los apósitos</strong> al menos las primeras <strong>48 a 72 horas</strong></div>
+      <div class="cuidado-item"><span class="cuidado-item-icon">🚿</span> Si se mojan, <strong>secarlos con precaución</strong></div>
+      <div class="cuidado-item"><span class="cuidado-item-icon">🛁</span> Después del 2° o 3° día se puede bañar — las gasas deben cambiarse porque se mojarán</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:4px;">
+    <div class="card-title morado">💧 Hidratación</div>
+    <ul class="rec-list">
+      <li><span class="rec-icon">💧</span> Beber <strong>mínimo 2 litros de líquidos diarios</strong></li>
+      <li><span class="rec-icon">🥗</span> Seguir la <strong>pauta de alimentación</strong> indicada</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======================== -->
+<!-- MASAJES LINFÁTICOS       -->
+<!-- ======================== -->
+<div class="content" id="masajes">
+
+  <!-- Indicaciones -->
+  <div class="card">
+    <div class="card-title rosa">🤲 Indicaciones del drenaje linfático</div>
+    <div class="indicacion-chips">
+      <div class="chip"><span class="chip-icon">🔢</span> 5 – 8 – 10 sesiones</div>
+      <div class="chip"><span class="chip-icon">📅</span> Desde 1–3 días post cirugía</div>
+      <div class="chip"><span class="chip-icon">🔁</span> Cada 1–3 días según cada caso</div>
+    </div>
+  </div>
+
+  <!-- Ejemplo primera semana — Marce operó sáb 22 marzo, alta dom 23 -->
+  <div class="card">
+    <div class="card-title rosa">📆 Ejemplo — Primera semana de Marce</div>
+    <div class="semana-grid">
+      <div class="semana-dia-header">Sáb</div>
+      <div class="semana-dia-header">Dom</div>
+      <div class="semana-dia-header">Lun</div>
+      <div class="semana-dia-header">Mar</div>
+      <div class="semana-dia-header">Mié</div>
+      <div class="semana-dia-header">Jue</div>
+      <div class="semana-dia-header">Vie</div>
+
+      <!-- Sáb 22 — Cirugía -->
+      <div class="semana-dia cirugia">
+        <span class="semana-emoji">🏥</span>
+        <span class="semana-dia-num">22</span>
+        <span class="semana-dia-label">Cirugía</span>
+      </div>
+      <!-- Dom 23 — Alta -->
+      <div class="semana-dia alta-dia">
+        <span class="semana-emoji">🏠</span>
+        <span class="semana-dia-num">23</span>
+        <span class="semana-dia-label">Alta</span>
+      </div>
+      <!-- Lun 24 — 1er masaje posible (día 2 post op) -->
+      <div class="semana-dia masaje">
+        <span class="semana-emoji">🤲</span>
+        <span class="semana-dia-num">24</span>
+        <span class="semana-dia-label">Masaje posible</span>
+      </div>
+      <!-- Mar 25 — reposo -->
+      <div class="semana-dia reposo">
+        <span class="semana-emoji">🛌</span>
+        <span class="semana-dia-num">25</span>
+        <span class="semana-dia-label">Reposo</span>
+      </div>
+      <!-- Mié 26 — masaje -->
+      <div class="semana-dia masaje">
+        <span class="semana-emoji">🤲</span>
+        <span class="semana-dia-num">26</span>
+        <span class="semana-dia-label">Masaje posible</span>
+      </div>
+      <!-- Jue 27 — reposo -->
+      <div class="semana-dia reposo">
+        <span class="semana-emoji">🛌</span>
+        <span class="semana-dia-num">27</span>
+        <span class="semana-dia-label">Reposo</span>
+      </div>
+      <!-- Vie 28 — masaje -->
+      <div class="semana-dia masaje">
+        <span class="semana-emoji">🤲</span>
+        <span class="semana-dia-num">28</span>
+        <span class="semana-dia-label">Masaje posible</span>
+      </div>
+    </div>
+
+    <div class="semana-leyenda">
+      <div class="leyenda-item"><div class="leyenda-dot" style="background:#fdeef4;border:2px solid #b5477a;"></div> Cirugía / Masaje</div>
+      <div class="leyenda-item"><div class="leyenda-dot" style="background:#e8f0fb;border:2px solid #3a6ea8;"></div> Alta médica</div>
+      <div class="leyenda-item"><div class="leyenda-dot" style="background:#f5f5f5;"></div> Reposo</div>
+    </div>
+    <p style="font-size:0.75rem;color:var(--gris);margin-top:10px;line-height:1.5;">* Los días de masaje son orientativos (cada 2 días). La frecuencia exacta la define el profesional según cada caso.</p>
+  </div>
+
+  <!-- CONFIGURADOR INTELIGENTE -->
+  <div class="config-card">
+    <div class="config-title">🗓️ Generar mi calendario de sesiones</div>
+
+    <div class="config-row">
+      <div class="config-label">Fecha del 1er masaje</div>
+      <div class="config-sublabel">Entre el día 1 y 3 post cirugía (24–26 de marzo)</div>
+      <input type="date" class="config-input" id="fecha-inicio" value="2026-03-24" min="2026-03-24" max="2026-03-26">
+    </div>
+
+    <div class="config-row">
+      <div class="config-label">Frecuencia entre sesiones</div>
+      <div class="config-sublabel">Cada cuántos días (1–3 según indicaciones)</div>
+      <div class="opciones-grid">
+        <button class="opcion-btn" onclick="selFrec(1,this)">Cada 1 día</button>
+        <button class="opcion-btn sel" onclick="selFrec(2,this)">Cada 2 días</button>
+        <button class="opcion-btn" onclick="selFrec(3,this)">Cada 3 días</button>
+      </div>
+    </div>
+
+    <div class="config-row">
+      <div class="config-label">Total de sesiones</div>
+      <div class="config-sublabel">Según indicación médica: 5, 8 o 10</div>
+      <div class="opciones-grid">
+        <button class="opcion-btn" onclick="selSes(5,this)">5 sesiones</button>
+        <button class="opcion-btn sel" onclick="selSes(8,this)">8 sesiones</button>
+        <button class="opcion-btn" onclick="selSes(10,this)">10 sesiones</button>
+      </div>
+    </div>
+
+    <button class="generar-btn" onclick="generarCalendario()">
+      🗓️ Generar calendario completo
+    </button>
+
+    <!-- RESULTADO -->
+    <div id="calendario-resultado">
+      <div style="height:14px;"></div>
+      <div class="cal-header">
+        <div class="cal-header-title" id="cal-title">Calendario de masajes de Marce</div>
+        <div class="cal-header-sub" id="cal-sub"></div>
+      </div>
+      <div class="cal-body">
+        <div id="cal-meses"></div>
+        <div class="cal-lista">
+          <div class="cal-lista-title">📋 Lista de sesiones</div>
+          <div id="cal-sesiones-lista"></div>
+        </div>
+        <div class="cal-resumen" id="cal-resumen"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="amor-footer">
+  <span class="corazon">💚</span>
+  Creado con amor por <strong>Alberto</strong><br>para una pronta recuperación ❤️
+</div>
+
+<script>
+  const tabMap = { alimentacion:'ali', remedios:'rem', descanso:'des', masajes:'mas' };
+  let frecSeleccionada = 2;
+  let sesSeleccionadas = 8;
+
+  function showTab(tab) {
+    document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(tab).classList.add('active');
+    document.getElementById('tab-' + tabMap[tab]).classList.add('active');
+  }
+  function toggleGrupo(h)   { h.parentElement.classList.toggle('open'); }
+  function toggleCuidado(h) { h.parentElement.classList.toggle('open'); }
+
+  function selFrec(v, btn) {
+    frecSeleccionada = v;
+    btn.closest('.opciones-grid').querySelectorAll('.opcion-btn').forEach(b => b.classList.remove('sel'));
+    btn.classList.add('sel');
+  }
+  function selSes(v, btn) {
+    sesSeleccionadas = v;
+    btn.closest('.opciones-grid').querySelectorAll('.opcion-btn').forEach(b => b.classList.remove('sel'));
+    btn.classList.add('sel');
+  }
+
+  const DIAS_ES  = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  const MESES_ES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+  function generarCalendario() {
+    const fechaStr = document.getElementById('fecha-inicio').value;
+    if (!fechaStr) { alert('Por favor elige la fecha del primer masaje'); return; }
+
+    // Generar lista de sesiones
+    const sesiones = [];
+    let current = new Date(fechaStr + 'T12:00:00');
+    for (let i = 0; i < sesSeleccionadas; i++) {
+      sesiones.push(new Date(current));
+      current = new Date(current);
+      current.setDate(current.getDate() + frecSeleccionada);
+    }
+
+    const ultima = sesiones[sesiones.length - 1];
+    document.getElementById('cal-sub').textContent =
+      sesSeleccionadas + ' sesiones · cada ' + frecSeleccionada + ' día' + (frecSeleccionada > 1 ? 's' : '') +
+      ' · hasta el ' + formatFecha(ultima);
+
+    // Agrupar por mes
+    const mesesSet = new Map();
+    sesiones.forEach(d => {
+      const key = d.getFullYear() + '-' + d.getMonth();
+      if (!mesesSet.has(key)) mesesSet.set(key, { year: d.getFullYear(), month: d.getMonth(), dias: new Set() });
+      mesesSet.get(key).dias.add(d.getDate());
+    });
+
+    // Fechas especiales
+    const cirugia = new Date('2026-03-22T12:00:00');
+    const alta    = new Date('2026-03-23T12:00:00');
+    const hoy     = new Date();
+
+    let htmlMeses = '';
+    mesesSet.forEach(({ year, month, dias }) => {
+      const primerDia = new Date(year, month, 1).getDay(); // 0=Dom
+      const totalDias = new Date(year, month + 1, 0).getDate();
+
+      htmlMeses += `<div class="cal-mes">
+        <span class="cal-mes-nombre">${MESES_ES[month]} ${year}</span>
+        <div class="cal-mes-grid">`;
+
+      // Cabeceras
+      ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'].forEach(d => {
+        htmlMeses += `<div class="cal-dia-head">${d}</div>`;
+      });
+
+      // Celdas vacías inicio
+      for (let e = 0; e < primerDia; e++) {
+        htmlMeses += `<div class="cal-dia"></div>`;
+      }
+
+      // Días del mes
+      for (let d = 1; d <= totalDias; d++) {
+        const fecha = new Date(year, month, d);
+        let cls = 'cal-dia tiene-dia';
+        let emoji = '';
+        let label = '';
+
+        const esCirugia = fecha.toDateString() === cirugia.toDateString();
+        const esAlta    = fecha.toDateString() === alta.toDateString();
+        const esMasaje  = dias.has(d);
+        const esHoy     = fecha.toDateString() === hoy.toDateString();
+
+        if (esCirugia)  { cls += ' es-cirugia'; emoji = '🏥'; label = 'Cirugía'; }
+        else if (esAlta){ cls += ' es-alta';    emoji = '🏠'; label = 'Alta'; }
+        else if (esMasaje){ cls += ' es-masaje'; emoji = '🤲'; }
+        if (esHoy) cls += ' es-hoy';
+
+        // número de sesión
+        let numSes = '';
+        if (esMasaje) {
+          const idx = sesiones.findIndex(s => s.getFullYear()===year && s.getMonth()===month && s.getDate()===d);
+          if (idx >= 0) numSes = `<div style="font-size:0.6rem;font-weight:800;color:var(--rosa);">S${idx+1}</div>`;
+        }
+
+        htmlMeses += `<div class="${cls}">
+          ${emoji ? `<span style="font-size:0.9rem;">${emoji}</span>` : ''}
+          <span style="font-weight:${esMasaje||esCirugia||esAlta?'800':'600'};">${d}</span>
+          ${label ? `<div style="font-size:0.55rem;font-weight:700;">${label}</div>` : ''}
+          ${numSes}
+        </div>`;
+      }
+
+      htmlMeses += `</div></div>`;
+    });
+
+    document.getElementById('cal-meses').innerHTML = htmlMeses;
+
+    // Lista de sesiones
+    let htmlLista = '';
+    sesiones.forEach((d, i) => {
+      htmlLista += `<div class="cal-sesion-row">
+        <div class="cal-sesion-num">${i+1}</div>
+        <div>
+          <div class="cal-sesion-fecha">${formatFechaCompleta(d)}</div>
+          <div class="cal-sesion-dia">${DIAS_ES[d.getDay()]} · Día ${i * frecSeleccionada + 1} desde el primer masaje</div>
+        </div>
+        <span style="font-size:1.1rem;">🤲</span>
+      </div>`;
+    });
+    document.getElementById('cal-sesiones-lista').innerHTML = htmlLista;
+
+    // Resumen
+    document.getElementById('cal-resumen').innerHTML =
+      `<strong>Resumen:</strong> ${sesSeleccionadas} sesiones · desde el ${formatFecha(sesiones[0])} hasta el ${formatFecha(ultima)} · frecuencia: cada ${frecSeleccionada} día${frecSeleccionada>1?'s':''}.`;
+
+    document.getElementById('calendario-resultado').style.display = 'block';
+    setTimeout(() => { document.getElementById('calendario-resultado').scrollIntoView({ behavior:'smooth', block:'start' }); }, 100);
+  }
+
+  function formatFecha(d) {
+    return d.getDate() + ' de ' + MESES_ES[d.getMonth()];
+  }
+  function formatFechaCompleta(d) {
+    return d.getDate() + ' de ' + MESES_ES[d.getMonth()] + ' ' + d.getFullYear();
+  }
+</script>
+</body>
+</html>
