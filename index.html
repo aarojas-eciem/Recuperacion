@@ -598,46 +598,46 @@
       <div class="semana-dia-header">Jue</div>
       <div class="semana-dia-header">Vie</div>
 
-      <!-- Sáb 22 — Cirugía -->
+      <!-- Sáb 21 — Cirugía -->
       <div class="semana-dia cirugia">
         <span class="semana-emoji">🏥</span>
-        <span class="semana-dia-num">22</span>
+        <span class="semana-dia-num">21</span>
         <span class="semana-dia-label">Cirugía</span>
       </div>
-      <!-- Dom 23 — Alta -->
+      <!-- Dom 22 — Alta -->
       <div class="semana-dia alta-dia">
         <span class="semana-emoji">🏠</span>
-        <span class="semana-dia-num">23</span>
+        <span class="semana-dia-num">22</span>
         <span class="semana-dia-label">Alta</span>
       </div>
-      <!-- Lun 24 — 1er masaje posible (día 2 post op) -->
+      <!-- Lun 23 — 1er masaje posible (día 2 post op) -->
       <div class="semana-dia masaje">
         <span class="semana-emoji">🤲</span>
+        <span class="semana-dia-num">23</span>
+        <span class="semana-dia-label">Masaje posible</span>
+      </div>
+      <!-- Mar 24 — reposo -->
+      <div class="semana-dia reposo">
+        <span class="semana-emoji">🛌</span>
         <span class="semana-dia-num">24</span>
-        <span class="semana-dia-label">Masaje posible</span>
+        <span class="semana-dia-label">Reposo</span>
       </div>
-      <!-- Mar 25 — reposo -->
-      <div class="semana-dia reposo">
-        <span class="semana-emoji">🛌</span>
+      <!-- Mié 25 — masaje -->
+      <div class="semana-dia masaje">
+        <span class="semana-emoji">🤲</span>
         <span class="semana-dia-num">25</span>
-        <span class="semana-dia-label">Reposo</span>
-      </div>
-      <!-- Mié 26 — masaje -->
-      <div class="semana-dia masaje">
-        <span class="semana-emoji">🤲</span>
-        <span class="semana-dia-num">26</span>
         <span class="semana-dia-label">Masaje posible</span>
       </div>
-      <!-- Jue 27 — reposo -->
+      <!-- Jue 26 — reposo -->
       <div class="semana-dia reposo">
         <span class="semana-emoji">🛌</span>
-        <span class="semana-dia-num">27</span>
+        <span class="semana-dia-num">26</span>
         <span class="semana-dia-label">Reposo</span>
       </div>
-      <!-- Vie 28 — masaje -->
+      <!-- Vie 27 — masaje -->
       <div class="semana-dia masaje">
         <span class="semana-emoji">🤲</span>
-        <span class="semana-dia-num">28</span>
+        <span class="semana-dia-num">27</span>
         <span class="semana-dia-label">Masaje posible</span>
       </div>
     </div>
@@ -656,8 +656,8 @@
 
     <div class="config-row">
       <div class="config-label">Fecha del 1er masaje</div>
-      <div class="config-sublabel">Entre el día 1 y 3 post cirugía (24–26 de marzo)</div>
-      <input type="date" class="config-input" id="fecha-inicio" value="2026-03-24" min="2026-03-24" max="2026-03-26">
+      <div class="config-sublabel">Entre el día 1 y 3 post cirugía (23–25 de marzo)</div>
+      <input type="date" class="config-input" id="fecha-inicio" value="2026-03-23" min="2026-03-23" max="2026-03-25">
     </div>
 
     <div class="config-row">
@@ -765,8 +765,8 @@
     });
 
     // Fechas especiales
-    const cirugia = new Date('2026-03-22T12:00:00');
-    const alta    = new Date('2026-03-23T12:00:00');
+    const cirugia = new Date('2026-03-21T12:00:00');
+    const alta    = new Date('2026-03-22T12:00:00');
     const hoy     = new Date();
 
     let htmlMeses = '';
